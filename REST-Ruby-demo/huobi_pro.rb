@@ -6,11 +6,13 @@ require 'digest/md5'
 require 'base64'
 class HuobiPro
 
-  def initialize(access_key,secret_key,account_id,signature_version="2")
+  attr_writer :account_id
+
+  def initialize(access_key,secret_key,signature_version="2")
       @access_key = access_key
       @secret_key = secret_key
       @signature_version = signature_version
-      @account_id = account_id
+      @account_id = "whatever_id"
       @uri = URI.parse "https://api.huobi.pro/"
       @header = {
         'Content-Type'=> 'application/json',
@@ -277,8 +279,9 @@ end
 
 access_key = '********************************'
 secret_key = '********************************'
-account_id = '******'
-huobi_pro = HuobiPro.new(access_key,secret_key,account_id)
+huobi_pro = HuobiPro.new(access_key,secret_key)
+huobi_pro.account_id = huobi_pro.accounts["data"].first["id"]
+
 # p huobi_pro.balances
 # p huobi_pro.symbols
 # p huobi_pro.depth('ethbtc')
